@@ -3,3 +3,4 @@ class Data:
         self.bg_color = (0, 0, 0)
         self.player_1_color = (255, 255, 255)
         self.player_2_color = (255, 255, 255)
+        self.ball_color = (255, 255, 255)
