@@ -1,5 +1,7 @@
 import pygame
 
+from scripts.player import Player
+
 
 class DefaultGameScene:
     def __init__(self, game_state_manager, data, display):
@@ -7,20 +9,43 @@ class DefaultGameScene:
         self.data = data
         self.display = display
 
-        self.player_width = 20
-        self.player_height = 100
+        self.screen_height = self.display.get_size()[1]
+        self.player_1 = Player(20, 100, self.screen_height, 100, 7, True)
+        self.player_2 = Player(20, 100, self.screen_height, 1160, 7, True)
 
-        self.screen_center = display.get_size()[1] // 2 - self.player_height // 2
-
-        self.player_1_x = 100
-        self.player_1_y = self.screen_center
-
-        self.player_2_x = display.get_size()[0] - 100 - self.player_width
-        self.player_2_y = self.screen_center
-
-        self.player_1_rect = pygame.Rect(self.player_1_x, self.player_1_y, self.player_width, self.player_height)
-        self.player_2_rect = pygame.Rect(self.player_2_x, self.player_2_y, self.player_width, self.player_height)
+    def run(self):
+        keys = pygame.key.get_pressed()
+        self.render()
+        self.handle_player_1_input(keys)
+        self.handle_player_2_input(keys)
+        self.update()
 
     def render(self):
-        pygame.draw.rect(self.display, self.data.player_1_color, self.player_1_rect)
-        pygame.draw.rect(self.display, self.data.player_2_color, self.player_2_rect)
+        pygame.draw.rect(self.display, self.data.player_1_color, self.player_1.rect)
+        pygame.draw.rect(self.display, self.data.player_2_color, self.player_2.rect)
+
+    def handle_player_1_input(self, keys):
+        if self.player_1.controllable:
+            if keys[pygame.K_w]:
+                self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, -1, self.player_1.speed)
+            if keys[pygame.K_s]:
+                self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, 1, self.player_1.speed)
+
+    def handle_player_2_input(self, keys):
+        if self.player_2.controllable:
+            if keys[pygame.K_UP]:
+                self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, -1, self.player_2.speed)
+            if keys[pygame.K_DOWN]:
+                self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, 1, self.player_2.speed)
+
+    def change_y(self, obj_y, obj_height, direction, speed):
+        if direction == 1:
+            return min(self.screen_height - obj_height, obj_y + speed)
+        elif direction == -1:
+            return max(0, obj_y - speed)
+        else:
+            raise TypeError("direction must be 1 or -1!")
+
+    def update(self):
+        self.player_1.rect.y = self.player_1.y
+        self.player_2.rect.y = self.player_2.y

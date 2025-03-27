@@ -27,7 +27,7 @@ class Game:
 
             events = pygame.event.get()
 
-            self.scenes[self.game_state_manager.get_state()].run(events)
+            self.scenes[self.game_state_manager.get_state()].run()
 
             for event in events:
                 if event.type == pygame.QUIT:
