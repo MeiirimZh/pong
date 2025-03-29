@@ -13,15 +13,12 @@ class DefaultGameScene:
         self.screen_width = self.display.get_size()[0]
         self.screen_height = self.display.get_size()[1]
 
-        self.player_1 = Player(20, 150, self.screen_height, 100, 7, True)
-        self.player_2 = Player(20, 150, self.screen_height, 1160, 7, True)
+        self.player_1 = Player(20, 150, self.screen_height, 100, 7)
+        self.player_2 = Player(20, 150, self.screen_height, 1160, 7)
         self.ball = Ball(30, 30, self.screen_width, self.screen_height, 10, 10, 1, 0)
 
     def run(self):
-        keys = pygame.key.get_pressed()
         self.render()
-        self.handle_player_1_input(keys)
-        self.handle_player_2_input(keys)
         self.update_players()
 
     def render(self):
@@ -30,18 +27,16 @@ class DefaultGameScene:
         pygame.draw.rect(self.display, self.data.ball_color, self.ball.rect)
 
     def handle_player_1_input(self, keys):
-        if self.player_1.controllable:
-            if keys[pygame.K_w]:
-                self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, -1, self.player_1.speed)
-            if keys[pygame.K_s]:
-                self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, 1, self.player_1.speed)
+        if keys[pygame.K_w]:
+            self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, -1, self.player_1.speed)
+        if keys[pygame.K_s]:
+            self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, 1, self.player_1.speed)
 
     def handle_player_2_input(self, keys):
-        if self.player_2.controllable:
-            if keys[pygame.K_UP]:
-                self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, -1, self.player_2.speed)
-            if keys[pygame.K_DOWN]:
-                self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, 1, self.player_2.speed)
+        if keys[pygame.K_UP]:
+            self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, -1, self.player_2.speed)
+        if keys[pygame.K_DOWN]:
+            self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, 1, self.player_2.speed)
 
     def change_y(self, obj_y, obj_height, direction, speed):
         if direction == 1:
