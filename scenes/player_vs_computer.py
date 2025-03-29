@@ -12,3 +12,4 @@ class PlayerVsComputer(DefaultGameScene):
 
         keys = pygame.key.get_pressed()
         self.handle_player_1_input(keys)
+        self.handle_player_2_input(keys)

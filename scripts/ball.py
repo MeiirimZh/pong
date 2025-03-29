@@ -10,6 +10,6 @@ class Ball:
         self.y = screen_height // 2 - self.height // 2
         self.h_speed = h_speed
         self.v_speed = v_speed
-        self.h_moving = h_direction
-        self.v_moving = v_direction
+        self.h_direction = h_direction
+        self.v_direction = v_direction
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
