@@ -14,10 +14,19 @@ class DefaultGameScene:
         self.screen_width = self.display.get_size()[0]
         self.screen_height = self.display.get_size()[1]
 
+        self.ball_start_direction = choice([-1, 1])
+
         self.player_height = 150
         self.player_1 = Player(20, self.player_height, self.screen_height, 100, 7)
         self.player_2 = Player(20, self.player_height, self.screen_height, 1160, 7)
-        self.ball = Ball(30, 30, self.screen_width, self.screen_height, 10, 10, 1, 0)
+        self.ball = Ball(30, 30, self.screen_width, self.screen_height, 10, 10, self.ball_start_direction, 0)
+
+        self.player_1_scores = 0
+        self.player_2_scores = 0
+        self.player_1_score_text = self.data.score_font.render(str(self.player_1_scores), True, self.data.scores_color)
+        self.player_2_score_text = self.data.score_font.render(str(self.player_2_scores), True, self.data.scores_color)
+
+        self.divider = pygame.Rect(638, 0, 4, 720)
 
     def run(self):
         self.render()
@@ -27,6 +36,9 @@ class DefaultGameScene:
         self.detect_goal()
 
     def render(self):
+        self.display.blit(self.player_1_score_text, (self.p1_score_pos(), 329))
+        self.display.blit(self.player_2_score_text, (660, 329))
+        pygame.draw.rect(self.display, self.data.divider_color, self.divider)
         pygame.draw.rect(self.display, self.data.player_1_color, self.player_1.rect)
         pygame.draw.rect(self.display, self.data.player_2_color, self.player_2.rect)
         pygame.draw.rect(self.display, self.data.ball_color, self.ball.rect)
@@ -122,9 +134,16 @@ class DefaultGameScene:
     def restart(self):
         if self.ball.x == 0:
             self.ball.h_direction = -1
+            self.player_2_scores += 1
+            self.player_2_score_text = self.data.score_font.render(str(self.player_2_scores), True, self.data.scores_color)
         else:
             self.ball.h_direction = 1
+            self.player_1_scores += 1
+            self.player_1_score_text = self.data.score_font.render(str(self.player_1_scores), True, self.data.scores_color)
 
         self.ball.x = self.screen_width // 2 - self.ball.width // 2
         self.ball.y = self.screen_height // 2 -self.ball.height // 2
         self.ball.v_direction = 0
+
+    def p1_score_pos(self):
+        return 620 - self.data.score_font.size(str(self.player_1_scores))[0]
