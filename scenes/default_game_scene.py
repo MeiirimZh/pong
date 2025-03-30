@@ -14,17 +14,21 @@ class DefaultGameScene:
         self.screen_width = self.display.get_size()[0]
         self.screen_height = self.display.get_size()[1]
 
-        self.ball_start_direction = choice([-1, 1])
+        self.ball_start_h_direction = choice([-1, 1]) 
+        self.ball_start_v_direction = choice([-1, 1])
 
         self.player_height = 150
         self.player_1 = Player(20, self.player_height, self.screen_height, 100, 7)
         self.player_2 = Player(20, self.player_height, self.screen_height, 1160, 7)
-        self.ball = Ball(30, 30, self.screen_width, self.screen_height, 10, 10, self.ball_start_direction, 0)
+        self.ball = Ball(30, 30, self.screen_width, self.screen_height, 5, 5,
+                        self.ball_start_h_direction, self.ball_start_v_direction)
 
         self.player_1_scores = 0
         self.player_2_scores = 0
         self.player_1_score_text = self.data.score_font.render(str(self.player_1_scores), True, self.data.scores_color)
         self.player_2_score_text = self.data.score_font.render(str(self.player_2_scores), True, self.data.scores_color)
+
+        self.rounds = 0
 
         self.divider = pygame.Rect(638, 0, 4, 720)
 
@@ -92,13 +96,13 @@ class DefaultGameScene:
             self.ball.v_direction = -self.ball.v_direction
 
     def detect_ball_collision(self):
-        parts_count = 3
+        parts_count = 5
 
         if self.ball.rect.colliderect(self.player_1.rect):
             collide_part = self.what_part_of_x_is_y_in(self.player_1.height, self.player_1.y, self.ball.height, self.ball.y, parts_count)
-            if collide_part == 1:
+            if collide_part in (1, 2):
                 self.ball.v_direction = -1
-            elif collide_part == 2:
+            elif collide_part == 3:
                 self.ball.v_direction = 0
             else:
                 self.ball.v_direction = 1
@@ -106,9 +110,9 @@ class DefaultGameScene:
 
         if self.ball.rect.colliderect(self.player_2.rect):
             collide_part = self.what_part_of_x_is_y_in(self.player_2.height, self.player_2.y, self.ball.height, self.ball.y, parts_count)
-            if collide_part == 1:
+            if collide_part in (1, 2):
                 self.ball.v_direction = -1
-            elif collide_part == 2:
+            elif collide_part == 3:
                 self.ball.v_direction = 0
             else:
                 self.ball.v_direction = 1
@@ -132,18 +136,28 @@ class DefaultGameScene:
             self.restart()
 
     def restart(self):
+        self.rounds += 1
+
         if self.ball.x == 0:
             self.ball.h_direction = -1
-            self.player_2_scores += 1
-            self.player_2_score_text = self.data.score_font.render(str(self.player_2_scores), True, self.data.scores_color)
+            self.player_2_win(1)
         else:
             self.ball.h_direction = 1
-            self.player_1_scores += 1
-            self.player_1_score_text = self.data.score_font.render(str(self.player_1_scores), True, self.data.scores_color)
+            self.player_1_win(1)
 
         self.ball.x = self.screen_width // 2 - self.ball.width // 2
         self.ball.y = self.screen_height // 2 -self.ball.height // 2
-        self.ball.v_direction = 0
+        self.ball.v_direction = choice([-1, 1])
+        self.ball.h_speed = 5 + self.rounds // 5
+        self.ball.v_speed = 5 + self.rounds // 5
 
     def p1_score_pos(self):
         return 620 - self.data.score_font.size(str(self.player_1_scores))[0]
+    
+    def player_1_win(self, scores):
+        self.player_1_scores += scores
+        self.player_1_score_text = self.data.score_font.render(str(self.player_1_scores), True, self.data.scores_color)
+
+    def player_2_win(self, scores):
+        self.player_2_scores += scores
+        self.player_2_score_text = self.data.score_font.render(str(self.player_2_scores), True, self.data.scores_color)

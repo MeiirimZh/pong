@@ -7,9 +7,10 @@ class PlayerVsComputer(DefaultGameScene):
     def __init__(self, game_state_manager, data, display):
         super().__init__(game_state_manager, data, display)
 
+        self.player_handlers = {"Player 1": self.handle_player_1_input, "Player 2": self.handle_player_2_input}
+
     def run(self):
         super().run()
 
         keys = pygame.key.get_pressed()
-        self.handle_player_1_input(keys)
-        self.handle_player_2_input(keys)
+        self.player_handlers[self.data.player](keys)

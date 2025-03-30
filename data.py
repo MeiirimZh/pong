@@ -13,3 +13,5 @@ class Data:
         self.divider_color = (50, 50, 50)
 
         self.score_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 50)
+
+        self.player = "Player 1"
