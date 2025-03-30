@@ -82,17 +82,27 @@ class DefaultGameScene:
     def detect_ball_collision(self):
         part = self.player_height // 5
 
-        if self.ball.rect.colliderect(self.player_1.rect) or self.ball.rect.colliderect(self.player_2.rect):
-            if 0 <= self.ball.y < part: # or part <= self.ball.y < part * 2:
+        if self.ball.rect.colliderect(self.player_1.rect):
+            if self.player_1.y - self.ball.height <= self.ball.y < self.player_1.y + part or \
+            self.player_1.y + part <= self.ball.y < self.player_1.y + part * 2:
                 self.ball.v_direction = -1
-            # elif part * 2 <= self.ball.y < part * 3:
-            #     self.ball.v_direction = 0
-            # elif part * 3 <= self.ball.y < part * 4 or part * 4 <= self.ball.y < part * 5:
-            #     self.ball.v_direction = 1
+            elif self.player_1.y + part * 2 <= self.ball.y < self.player_1.y + part * 3:
+                self.ball.v_direction = 0
+            elif self.player_1.y + part * 3 <= self.ball.y < self.player_1.y + part * 4 or \
+            self.player_1.y + part * 4 <= self.ball.y < self.player_1.y + part * 5 + self.ball.height:
+                self.ball.v_direction = 1
             self.ball.h_direction = -self.ball.h_direction
 
-        # if self.ball.rect.colliderect(self.player_1.rect) or self.ball.rect.colliderect(self.player_2.rect):
-        #     self.ball.h_direction = -self.ball.h_direction
+        if self.ball.rect.colliderect(self.player_2.rect):
+            if self.player_2.y <= self.ball.y < self.player_2.y + part or \
+            self.player_2.y + part <= self.ball.y < self.player_2.y + part * 2:
+                self.ball.v_direction = -1
+            elif self.player_2.y + part * 2 <= self.ball.y < self.player_2.y + part * 3:
+                self.ball.v_direction = 0
+            elif self.player_2.y + part * 3 <= self.ball.y < self.player_2.y + part * 4 or \
+            self.player_2.y + part * 4 <= self.ball.y < self.player_2.y + part * 5 + self.ball.height:
+                self.ball.v_direction = 1
+            self.ball.h_direction = -self.ball.h_direction
 
     def detect_goal(self):
         if self.ball.x == 0 or self.ball.x == self.screen_width - self.ball.width:
