@@ -80,36 +80,51 @@ class DefaultGameScene:
             self.ball.v_direction = -self.ball.v_direction
 
     def detect_ball_collision(self):
-        part = self.player_height // 5
+        parts_count = 3
 
         if self.ball.rect.colliderect(self.player_1.rect):
-            if self.player_1.y - self.ball.height <= self.ball.y < self.player_1.y + part or \
-            self.player_1.y + part <= self.ball.y < self.player_1.y + part * 2:
+            collide_part = self.what_part_of_x_is_y_in(self.player_1.height, self.player_1.y, self.ball.height, self.ball.y, parts_count)
+            if collide_part == 1:
                 self.ball.v_direction = -1
-            elif self.player_1.y + part * 2 <= self.ball.y < self.player_1.y + part * 3:
+            elif collide_part == 2:
                 self.ball.v_direction = 0
-            elif self.player_1.y + part * 3 <= self.ball.y < self.player_1.y + part * 4 or \
-            self.player_1.y + part * 4 <= self.ball.y < self.player_1.y + part * 5 + self.ball.height:
+            else:
                 self.ball.v_direction = 1
             self.ball.h_direction = -self.ball.h_direction
 
         if self.ball.rect.colliderect(self.player_2.rect):
-            if self.player_2.y <= self.ball.y < self.player_2.y + part or \
-            self.player_2.y + part <= self.ball.y < self.player_2.y + part * 2:
+            collide_part = self.what_part_of_x_is_y_in(self.player_2.height, self.player_2.y, self.ball.height, self.ball.y, parts_count)
+            if collide_part == 1:
                 self.ball.v_direction = -1
-            elif self.player_2.y + part * 2 <= self.ball.y < self.player_2.y + part * 3:
+            elif collide_part == 2:
                 self.ball.v_direction = 0
-            elif self.player_2.y + part * 3 <= self.ball.y < self.player_2.y + part * 4 or \
-            self.player_2.y + part * 4 <= self.ball.y < self.player_2.y + part * 5 + self.ball.height:
+            else:
                 self.ball.v_direction = 1
             self.ball.h_direction = -self.ball.h_direction
+
+    def what_part_of_x_is_y_in(self, obj_1_height, obj_1_y, obj_2_height, obj_2_y, parts_count):
+        part = obj_1_height // parts_count
+
+        if obj_1_y - obj_2_height <= obj_2_y < obj_1_y + part:
+            return 1
+        
+        if obj_1_y + part * parts_count - 1 <= obj_2_y < obj_1_y + part * parts_count + obj_2_height:
+            return parts_count
+
+        for i in range(1, part-1):
+            if obj_1_y + i * part <= obj_2_y < obj_1_y + (i+1) * part:
+                return i + 1
 
     def detect_goal(self):
         if self.ball.x == 0 or self.ball.x == self.screen_width - self.ball.width:
             self.restart()
 
     def restart(self):
+        if self.ball.x == 0:
+            self.ball.h_direction = -1
+        else:
+            self.ball.h_direction = 1
+
         self.ball.x = self.screen_width // 2 - self.ball.width // 2
         self.ball.y = self.screen_height // 2 -self.ball.height // 2
         self.ball.v_direction = 0
-        self.ball.h_direction = choice([-1, 1])
