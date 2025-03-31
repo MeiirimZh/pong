@@ -4,6 +4,7 @@ import pygame
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE, FPS
 from data import Data
 from scenes.player_vs_computer import PlayerVsComputer
+from scenes.player_vs_player import PlayerVsPlayer
 
 
 class Game:
@@ -17,7 +18,8 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.player_vs_computer = PlayerVsComputer(self.game_state_manager, self.data, self.display)
-        self.scenes = {"Player vs Computer": self.player_vs_computer}
+        self.player_vs_player = PlayerVsPlayer(self.game_state_manager, self.data, self.display)
+        self.scenes = {"Player vs Computer": self.player_vs_computer, "Player vs Player": self.player_vs_player}
 
     def run(self):
         while True:
