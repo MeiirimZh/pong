@@ -3,6 +3,7 @@ import pygame
 
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE, FPS
 from data import Data
+from scenes.main_menu import MainMenu
 from scenes.player_vs_computer import PlayerVsComputer
 from scenes.player_vs_player import PlayerVsPlayer
 
@@ -17,9 +18,11 @@ class Game:
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
 
+        self.main_menu = MainMenu(self.game_state_manager, self.data, self.display)
         self.player_vs_computer = PlayerVsComputer(self.game_state_manager, self.data, self.display)
         self.player_vs_player = PlayerVsPlayer(self.game_state_manager, self.data, self.display)
-        self.scenes = {"Player vs Computer": self.player_vs_computer, "Player vs Player": self.player_vs_player}
+        self.scenes = {"Main Menu": self.main_menu,
+            "Player vs Computer": self.player_vs_computer, "Player vs Player": self.player_vs_player}
 
     def run(self):
         while True:

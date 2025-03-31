@@ -4,6 +4,7 @@ import pygame
 class Data:
     def __init__(self):
         pygame.font.init()
+        pygame.mixer.init()
 
         self.bg_color = (0, 0, 0)
         self.player_1_color = (255, 255, 255)
@@ -20,3 +21,5 @@ class Data:
         self.computer_speed = 7
         self.ball_h_speed = 5
         self.ball_v_speed = 5
+
+        self.beep_sound = pygame.mixer.Sound("sounds/beep.mp3")

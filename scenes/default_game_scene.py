@@ -125,6 +125,7 @@ class DefaultGameScene:
             else:
                 self.ball.v_direction = 1
             self.ball.h_direction = -self.ball.h_direction
+            self.data.beep_sound.play()
 
         if self.ball.rect.colliderect(self.player_2.rect):
             collide_part = self.what_part_of_x_is_y_in(self.player_2.height, self.player_2.y, self.ball.height, self.ball.y, parts_count)
@@ -135,6 +136,7 @@ class DefaultGameScene:
             else:
                 self.ball.v_direction = 1
             self.ball.h_direction = -self.ball.h_direction
+            self.data.beep_sound.play()
 
     def what_part_of_x_is_y_in(self, obj_1_height, obj_1_y, obj_2_height, obj_2_y, parts_count):
         part = obj_1_height // parts_count
