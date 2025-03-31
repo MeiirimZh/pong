@@ -18,9 +18,9 @@ class DefaultGameScene:
         self.ball_start_v_direction = choice([-1, 1])
 
         self.player_height = 150
-        self.player_1 = Player(20, self.player_height, self.screen_height, 100, 7)
-        self.player_2 = Player(20, self.player_height, self.screen_height, 1160, 7)
-        self.ball = Ball(30, 30, self.screen_width, self.screen_height, 5, 5,
+        self.player_1 = Player(20, self.player_height, self.screen_height, 100, self.data.player_speed)
+        self.player_2 = Player(20, self.player_height, self.screen_height, 1160, self.data.player_speed)
+        self.ball = Ball(30, 30, self.screen_width, self.screen_height, self.data.ball_h_speed, self.data.ball_v_speed,
                         self.ball_start_h_direction, self.ball_start_v_direction)
 
         self.player_1_scores = 0
@@ -95,6 +95,24 @@ class DefaultGameScene:
         elif self.ball.y == self.screen_height - self.ball.height:
             self.ball.v_direction = -self.ball.v_direction
 
+    def update_computer(self):
+        if self.data.player == "Player 1":
+            self.move_computer(self.player_2)
+        else:
+            self.move_computer(self.player_1)
+
+    def move_computer(self, computer):
+        if 0 < computer.y - self.ball.y < 100:
+            computer.y = self.change_y(computer.y, computer.height, -1, computer.speed // 2)
+        elif 100 < computer.y - self.ball.y:
+            computer.y = self.change_y(computer.y, computer.height, -1, computer.speed)
+        elif computer.y == self.ball.y:
+            pass
+        elif 0 < self.ball.y - computer.y < 100:
+            computer.y = self.change_y(computer.y, computer.height, 1, computer.speed // 2)
+        else:
+            computer.y = self.change_y(computer.y, computer.height, 1, computer.speed)
+
     def detect_ball_collision(self):
         parts_count = 5
 
@@ -148,8 +166,8 @@ class DefaultGameScene:
         self.ball.x = self.screen_width // 2 - self.ball.width // 2
         self.ball.y = self.screen_height // 2 -self.ball.height // 2
         self.ball.v_direction = choice([-1, 1])
-        self.ball.h_speed = 5 + self.rounds // 5
-        self.ball.v_speed = 5 + self.rounds // 5
+        self.ball.h_speed = self.data.ball_h_speed + self.rounds // 5
+        self.ball.v_speed = self.data.ball_v_speed + self.rounds // 5
 
     def p1_score_pos(self):
         return 620 - self.data.score_font.size(str(self.player_1_scores))[0]

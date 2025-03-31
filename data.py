@@ -15,3 +15,8 @@ class Data:
         self.score_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 50)
 
         self.player = "Player 1"
+
+        self.player_speed = 7
+        self.computer_speed = 7
+        self.ball_h_speed = 5
+        self.ball_v_speed = 5
