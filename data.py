@@ -23,3 +23,4 @@ class Data:
         self.ball_v_speed = 5
 
         self.beep_sound = pygame.mixer.Sound("sounds/beep.mp3")
+        self.goal_sound = pygame.mixer.Sound("sounds/goal.mp3")

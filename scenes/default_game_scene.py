@@ -154,6 +154,7 @@ class DefaultGameScene:
     def detect_goal(self):
         if self.ball.x == 0 or self.ball.x == self.screen_width - self.ball.width:
             self.restart()
+            self.data.goal_sound.play()
 
     def restart(self):
         self.rounds += 1
