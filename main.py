@@ -10,11 +10,11 @@ from scenes.player_vs_player import PlayerVsPlayer
 
 class Game:
     def __init__(self):
-        self.game_state_manager = GameStateManager("Player vs Computer")
+        self.game_state_manager = GameStateManager("Main Menu")
         self.data = Data()
 
         pygame.init()
-        self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+        self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
 
@@ -32,7 +32,7 @@ class Game:
 
             events = pygame.event.get()
 
-            self.scenes[self.game_state_manager.get_state()].run()
+            self.scenes[self.game_state_manager.get_state()].run(events)
 
             for event in events:
                 if event.type == pygame.QUIT:

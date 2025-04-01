@@ -32,7 +32,7 @@ class DefaultGameScene:
 
         self.divider = pygame.Rect(638, 0, 4, 720)
 
-    def run(self):
+    def run(self, events):
         self.render()
         self.update_players()
         self.update_ball()

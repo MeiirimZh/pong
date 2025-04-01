@@ -14,8 +14,8 @@ class PlayerVsComputer(DefaultGameScene):
         else:
             self.player_1.speed = self.data.computer_speed
 
-    def run(self):
-        super().run()
+    def run(self, events):
+        super().run(events)
 
         keys = pygame.key.get_pressed()
         self.player_handlers[self.data.player](keys)
