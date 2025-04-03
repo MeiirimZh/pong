@@ -16,8 +16,6 @@ class MainMenu:
         self.option_pos = [(458, 340), (434, 399), (554, 458), (600, 517)]
         self.current_option = 0
 
-        print(self.data.credits_font.size("Made by Zhanzhumanov Meiirim 2025"))
-
     def run(self, events):
         self.display.fill((0, 0, 0))
 
@@ -45,7 +43,7 @@ class MainMenu:
                     elif self.current_option == 1:
                         self.game_state_manager.set_state("Player vs Computer")
                     elif self.current_option == 2:
-                        pass
+                        self.game_state_manager.set_state("Settings")
                     else:
                         pygame.quit()
                         exit()
