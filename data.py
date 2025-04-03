@@ -16,6 +16,7 @@ class Data:
         self.score_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 50)
         self.title_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 128)
         self.menu_option_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 32)
+        self.credits_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 12)
 
         self.player = "Player 1"
 
@@ -26,3 +27,4 @@ class Data:
 
         self.beep_sound = pygame.mixer.Sound("sounds/beep.mp3")
         self.goal_sound = pygame.mixer.Sound("sounds/goal.mp3")
+        self.select_sound = pygame.mixer.Sound("sounds/select.mp3")
