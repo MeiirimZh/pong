@@ -46,6 +46,9 @@ class Settings:
                 if event.unicode.isdigit():
                     if self.current_option in (1,):
                         self.enter_number(self.current_option, self.color_channel, event.unicode)
+                if event.key == pygame.K_BACKSPACE:
+                    if self.current_option in (1,):
+                        self.delete_number(self.current_option, self.color_channel)
                 if event.key == pygame.K_RETURN:
                     if self.current_option == 0:
                         self.data.on_fullscreen = not self.data.on_fullscreen
@@ -95,3 +98,15 @@ class Settings:
 
     def can_change_channel(self, channel):
         return len(str(channel)) != 3
+
+    def delete_number(self, option, color_channel):
+        if option == 1:
+            current_number = self.data.bg_color[color_channel]
+
+        if len(str(current_number)) == 1:
+            current_number = 0
+        else:
+            current_number = int(str(current_number)[:-1])
+
+        if option == 1:
+            self.data.bg_color[color_channel] = current_number
