@@ -13,16 +13,12 @@ class Settings:
 
         self.title = self.data.medium_font.render("Settings", True, (255, 255, 255))
 
-        self.options = ["Fullscreen", "Background color", "Return to menu"]
-        self.option_pos = [(400, 400), (400, 440), (400, 480)]
+        self.options = ["Fullscreen", "Background color", "Player 1 color", 
+                        "Player 2 color", "Ball color", "Return to menu"]
+        self.option_pos = [(400, 400), (400, 440), (400, 480), (400, 520), (400, 560),(400, 600)]
         self.current_option = 0
 
         self.color_channel = 0
-
-        self.bg_color_red = self.data.setting_font.render(str(self.data.bg_color[0]), True, (255, 255, 255))
-        self.bg_color_green = self.data.setting_font.render(str(self.data.bg_color[1]), True, (255, 255, 255))
-        self.bg_color_blue = self.data.setting_font.render(str(self.data.bg_color[2]), True, (255, 255, 255))
-        self.bg_color_channels = [self.bg_color_red, self.bg_color_green, self.bg_color_blue]
 
         self.change_bg = False
 
@@ -44,10 +40,10 @@ class Settings:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     self.color_channel = min(2, self.color_channel + 1)
                 if event.unicode.isdigit():
-                    if self.current_option in (1,):
+                    if self.current_option in (1, 2, 3, 4):
                         self.enter_number(self.current_option, self.color_channel, event.unicode)
                 if event.key == pygame.K_BACKSPACE:
-                    if self.current_option in (1,):
+                    if self.current_option in (1, 2, 3, 4):
                         self.delete_number(self.current_option, self.color_channel)
                 if event.key == pygame.K_RETURN:
                     if self.current_option == 0:
@@ -56,7 +52,7 @@ class Settings:
                             self.display = self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
                         else:
                             self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                    if self.current_option == 2:
+                    if self.current_option == 5:
                         self.game_state_manager.set_state("Main Menu")
 
     def render(self):
@@ -78,10 +74,36 @@ class Settings:
                 text = self.data.setting_font.render(str(self.data.bg_color[i]), True, (255, 255, 255))
             self.display.blit(text, (750 + i * self.distance_color_channels, 440))
 
+        for i in range(3):
+            if i == self.color_channel and self.current_option == 2:
+                text = self.data.setting_font.render(str(self.data.player_1_color[i]), True, (255, 0, 0))
+            else:
+                text = self.data.setting_font.render(str(self.data.player_1_color[i]), True, (255, 255, 255))
+            self.display.blit(text, (750 + i * self.distance_color_channels, 480))
+
+        for i in range(3):
+            if i == self.color_channel and self.current_option == 3:
+                text = self.data.setting_font.render(str(self.data.player_2_color[i]), True, (255, 0, 0))
+            else:
+                text = self.data.setting_font.render(str(self.data.player_2_color[i]), True, (255, 255, 255))
+            self.display.blit(text, (750 + i * self.distance_color_channels, 520))
+
+        for i in range(3):
+            if i == self.color_channel and self.current_option == 4:
+                text = self.data.setting_font.render(str(self.data.ball_color[i]), True, (255, 0, 0))
+            else:
+                text = self.data.setting_font.render(str(self.data.ball_color[i]), True, (255, 255, 255))
+            self.display.blit(text, (750 + i * self.distance_color_channels, 560))
+
     def enter_number(self, option, color_channel, event_unicode):
-        # Background color
         if option == 1:
             current_number = self.data.bg_color[color_channel]
+        elif option == 2:
+            current_number = self.data.player_1_color[color_channel]
+        elif option == 3:
+            current_number = self.data.player_2_color[color_channel]
+        elif option == 4:
+            current_number = self.data.ball_color[color_channel]
         
         if self.can_change_channel(current_number):
             if current_number == 0:
@@ -92,9 +114,14 @@ class Settings:
                 if int(current_number) > 255:
                     current_number = 255
 
-        # Background color
         if option == 1:
             self.data.bg_color[color_channel] = int(current_number)
+        elif option == 2:
+            self.data.player_1_color[color_channel] = int(current_number)
+        elif option == 3:
+            self.data.player_2_color[color_channel] = int(current_number)
+        elif option == 4:
+            self.data.ball_color[color_channel] = int(current_number)
 
     def can_change_channel(self, channel):
         return len(str(channel)) != 3
@@ -102,6 +129,12 @@ class Settings:
     def delete_number(self, option, color_channel):
         if option == 1:
             current_number = self.data.bg_color[color_channel]
+        elif option == 2:
+            current_number = self.data.player_1_color[color_channel]
+        elif option == 3:
+            current_number = self.data.player_2_color[color_channel]
+        elif option == 4:
+            current_number = self.data.ball_color[color_channel]
 
         if len(str(current_number)) == 1:
             current_number = 0
@@ -110,3 +143,9 @@ class Settings:
 
         if option == 1:
             self.data.bg_color[color_channel] = current_number
+        elif option == 2:
+            self.data.player_1_color[color_channel] = current_number
+        elif option == 3:
+            self.data.player_2_color[color_channel] = int(current_number)
+        elif option == 4:
+            self.data.ball_color[color_channel] = int(current_number)
