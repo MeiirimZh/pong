@@ -29,21 +29,13 @@ class Settings:
 
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    self.current_option = max(0, self.current_option - 1)
-                    self.data.select_sound.play()
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    self.current_option = min(len(self.options) - 1, self.current_option + 1)
-                    self.data.select_sound.play()
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    self.color_channel = max(0, self.color_channel - 1)
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    self.color_channel = min(2, self.color_channel + 1)
+                self.handle_option_switch(event)
+                self.handle_color_channel_switch(event)
                 if event.unicode.isdigit():
-                    if self.current_option in (1, 2, 3, 4):
+                    if self.current_option in range(1, 5):
                         self.enter_number(self.current_option, self.color_channel, event.unicode)
                 if event.key == pygame.K_BACKSPACE:
-                    if self.current_option in (1, 2, 3, 4):
+                    if self.current_option in range(1, 5):
                         self.delete_number(self.current_option, self.color_channel)
                 if event.key == pygame.K_RETURN:
                     if self.current_option == 0:
@@ -52,8 +44,22 @@ class Settings:
                             self.display = self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
                         else:
                             self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                    if self.current_option == 5:
+                    if self.current_option == len(self.options)-1:
                         self.game_state_manager.set_state("Main Menu")
+
+    def handle_option_switch(self, event):
+        if event.key == pygame.K_UP or event.key == pygame.K_w:
+            self.current_option = max(0, self.current_option - 1)
+            self.data.select_sound.play()
+        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            self.current_option = min(len(self.options) - 1, self.current_option + 1)
+            self.data.select_sound.play()
+
+    def handle_color_channel_switch(self, event):
+        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+            self.color_channel = max(0, self.color_channel - 1)
+        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+            self.color_channel = min(2, self.color_channel + 1)
 
     def render(self):
         self.display.fill((0, 0, 0))
@@ -67,33 +73,10 @@ class Settings:
                 text = self.data.setting_font.render(option, True, (255, 255, 255))
             self.display.blit(text, self.option_pos[self.options.index(option)])
 
-        for i in range(3):
-            if i == self.color_channel and self.current_option == 1:
-                text = self.data.setting_font.render(str(self.data.bg_color[i]), True, (255, 0, 0))
-            else:
-                text = self.data.setting_font.render(str(self.data.bg_color[i]), True, (255, 255, 255))
-            self.display.blit(text, (750 + i * self.distance_color_channels, 440))
-
-        for i in range(3):
-            if i == self.color_channel and self.current_option == 2:
-                text = self.data.setting_font.render(str(self.data.player_1_color[i]), True, (255, 0, 0))
-            else:
-                text = self.data.setting_font.render(str(self.data.player_1_color[i]), True, (255, 255, 255))
-            self.display.blit(text, (750 + i * self.distance_color_channels, 480))
-
-        for i in range(3):
-            if i == self.color_channel and self.current_option == 3:
-                text = self.data.setting_font.render(str(self.data.player_2_color[i]), True, (255, 0, 0))
-            else:
-                text = self.data.setting_font.render(str(self.data.player_2_color[i]), True, (255, 255, 255))
-            self.display.blit(text, (750 + i * self.distance_color_channels, 520))
-
-        for i in range(3):
-            if i == self.color_channel and self.current_option == 4:
-                text = self.data.setting_font.render(str(self.data.ball_color[i]), True, (255, 0, 0))
-            else:
-                text = self.data.setting_font.render(str(self.data.ball_color[i]), True, (255, 255, 255))
-            self.display.blit(text, (750 + i * self.distance_color_channels, 560))
+        self.render_color_channels(1, self.data.bg_color, 750, 440)
+        self.render_color_channels(2, self.data.player_1_color, 750, 480)
+        self.render_color_channels(3, self.data.player_2_color, 750, 520)
+        self.render_color_channels(4, self.data.ball_color, 750, 560)
 
     def enter_number(self, option, color_channel, event_unicode):
         if option == 1:
@@ -149,3 +132,11 @@ class Settings:
             self.data.player_2_color[color_channel] = int(current_number)
         elif option == 4:
             self.data.ball_color[color_channel] = int(current_number)
+
+    def render_color_channels(self, current_option, color, x, y):
+        for i in range(3):
+            if i == self.color_channel and self.current_option == current_option:
+                text = self.data.setting_font.render(str(color[i]), True, (255, 0, 0))
+            else:
+                text = self.data.setting_font.render(str(color[i]), True, (255, 255, 255))
+            self.display.blit(text, (x + i * self.distance_color_channels, y))
