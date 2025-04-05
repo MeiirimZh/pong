@@ -14,13 +14,12 @@ class Settings:
         self.title = self.data.medium_font.render("Settings", True, (255, 255, 255))
 
         self.options = ["Fullscreen", "Background color", "Player 1 color", 
-                        "Player 2 color", "Ball color", "Scores text color", "Return to menu"]
-        self.option_pos = [(400, 400), (400, 440), (400, 480), (400, 520), (400, 560), (400, 600), (400, 640)]
+                        "Player 2 color", "Ball color", "Scores text color", 
+                        "Divider color", "Return to menu"]
+        self.option_pos = [(400, 200), (400, 240), (400, 280), (400, 320), (400, 360), (400, 400), (400, 440), (400, 480)]
         self.current_option = 0
 
         self.color_channel = 0
-
-        self.change_bg = False
 
         self.pvp = player_vs_player
         self.pvc = player_vs_computer
@@ -35,10 +34,10 @@ class Settings:
                 self.handle_option_switch(event)
                 self.handle_color_channel_switch(event)
                 if event.unicode.isdigit():
-                    if self.current_option in range(1, 6):
+                    if self.current_option in range(1, 7):
                         self.enter_number(self.current_option, self.color_channel, event.unicode)
                 if event.key == pygame.K_BACKSPACE:
-                    if self.current_option in range(1, 6):
+                    if self.current_option in range(1, 7):
                         self.delete_number(self.current_option, self.color_channel)
                 if event.key == pygame.K_RETURN:
                     if self.current_option == 0:
@@ -76,11 +75,12 @@ class Settings:
                 text = self.data.setting_font.render(option, True, (255, 255, 255))
             self.display.blit(text, self.option_pos[self.options.index(option)])
 
-        self.render_color_channels(1, self.data.bg_color, 750, 440)
-        self.render_color_channels(2, self.data.player_1_color, 750, 480)
-        self.render_color_channels(3, self.data.player_2_color, 750, 520)
-        self.render_color_channels(4, self.data.ball_color, 750, 560)
-        self.render_color_channels(5, self.data.scores_color, 750, 600)
+        self.render_color_channels(1, self.data.bg_color, 750, self.option_pos[1][1])
+        self.render_color_channels(2, self.data.player_1_color, 750, self.option_pos[2][1])
+        self.render_color_channels(3, self.data.player_2_color, 750, self.option_pos[3][1])
+        self.render_color_channels(4, self.data.ball_color, 750, self.option_pos[4][1])
+        self.render_color_channels(5, self.data.scores_color, 750, self.option_pos[5][1])
+        self.render_color_channels(6, self.data.divider_color, 750, self.option_pos[6][1])
 
     def enter_number(self, option, color_channel, event_unicode):
         if option == 1:
@@ -94,6 +94,8 @@ class Settings:
         elif option == 5:
             current_number = self.data.scores_color[color_channel]
             self.update_scores_color()
+        elif option == 6:
+            current_number = self.data.divider_color[color_channel]
         
         if self.can_change_channel(current_number):
             if current_number == 0:
@@ -115,6 +117,8 @@ class Settings:
         elif option == 5:
             self.data.scores_color[color_channel] = int(current_number)
             self.update_scores_color()
+        elif option == 6:
+            self.data.divider_color[color_channel] = int(current_number)
 
     def can_change_channel(self, channel):
         return len(str(channel)) != 3
@@ -131,6 +135,8 @@ class Settings:
         elif option == 5:
             current_number = self.data.scores_color[color_channel]
             self.update_scores_color()
+        elif option == 6:
+            current_number = self.data.divider_color[color_channel]
 
         if len(str(current_number)) == 1:
             current_number = 0
@@ -148,6 +154,8 @@ class Settings:
         elif option == 5:
             self.data.scores_color[color_channel] = current_number
             self.update_scores_color()
+        elif option == 6:
+            self.data.divider_color[color_channel] = current_number
 
     def render_color_channels(self, current_option, color, x, y):
         for i in range(3):
