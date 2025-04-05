@@ -23,9 +23,9 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.main_menu = MainMenu(self.game_state_manager, self.data, self.display)
-        self.settings = Settings(self.game_state_manager, self.data, self.display)
         self.player_vs_computer = PlayerVsComputer(self.game_state_manager, self.data, self.display)
         self.player_vs_player = PlayerVsPlayer(self.game_state_manager, self.data, self.display)
+        self.settings = Settings(self.game_state_manager, self.data, self.display, self.player_vs_player, self.player_vs_computer)
         self.scenes = {"Main Menu": self.main_menu, "Settings": self.settings,
             "Player vs Computer": self.player_vs_computer, "Player vs Player": self.player_vs_player}
 
