@@ -15,9 +15,9 @@ class Settings:
 
         self.options = ["Fullscreen", "Player side", "Background color", "Player 1 color", 
                         "Player 2 color", "Ball color", "Scores text color", 
-                        "Divider color", "Return to menu"]
+                        "Divider color", "Reset settings", "Return to menu"]
         self.option_pos = [(400, 200), (400, 240), (400, 280), (400, 320), (400, 360), 
-                           (400, 400), (400, 440), (400, 480), (400, 520)]
+                           (400, 400), (400, 440), (400, 480), (400, 520), (400, 560)]
         self.current_option = 0
 
         self.color_channel = 0
@@ -53,7 +53,9 @@ class Settings:
                             self.display = self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
                         else:
                             self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                    if self.current_option == len(self.options)-1:
+                    if self.current_option == len(self.options) - 2:
+                        self.reset_settings()
+                    if self.current_option == len(self.options) - 1:
                         self.game_state_manager.set_state("Main Menu")
 
     def handle_option_switch(self, event):
@@ -196,3 +198,17 @@ class Settings:
                                                                    True, self.data.scores_color)
         self.pvc.player_2_score_text = self.data.score_font.render(str(self.pvc.player_2_scores), 
                                                                    True, self.data.scores_color)
+
+    def reset_settings(self):
+        self.data.on_fullscreen = False
+        self.data.bg_color = [0, 0, 0]
+        self.data.player_1_color = [255, 255, 255]
+        self.data.player_2_color = [255, 255, 255]
+        self.data.ball_color = [255, 255, 255]
+        self.data.scores_color = [50, 50, 50]
+        self.data.divider_color = [50, 50, 50]
+        self.data.player = "Player 1"
+        self.update_scores_color()
+
+        self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.side = 0
