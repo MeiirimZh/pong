@@ -1,4 +1,5 @@
 import pygame
+import json
 
 
 class Data:
@@ -32,3 +33,21 @@ class Data:
         self.beep_sound = pygame.mixer.Sound("sounds/beep.mp3")
         self.goal_sound = pygame.mixer.Sound("sounds/goal.mp3")
         self.select_sound = pygame.mixer.Sound("sounds/select.mp3")
+    
+    def load_data(self, path):
+        with open(path, 'r') as file:
+            return json.load(file)
+        
+    def save_data(self, path, data):
+        with open(path, 'w') as file:
+            json.dump(data, file, indent=2)
+
+    def set_settings(self, settings):
+        self.on_fullscreen = settings['on_fullscreen']
+        self.bg_color = settings['bg_color']
+        self.player_1_color = settings['player_1_color']
+        self.player_2_color = settings['player_2_color']
+        self.ball_color = settings['ball_color']
+        self.scores_color = settings['scores_color']
+        self.divider_color = settings['divider_color']
+        self.player = settings['player']

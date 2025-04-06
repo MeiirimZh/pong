@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE, FPS
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE, FPS, SETTINGS_PATH, DEFAULT_SETTINGS
 from data import Data
 from scenes.main_menu import MainMenu
 from scenes.settings import Settings
@@ -13,6 +13,11 @@ class Game:
     def __init__(self):
         self.game_state_manager = GameStateManager("Main Menu")
         self.data = Data()
+        try:
+            settings = self.data.load_data(SETTINGS_PATH)
+            self.data.set_settings(settings)
+        except FileNotFoundError:
+            self.data.save_data(SETTINGS_PATH, DEFAULT_SETTINGS)
 
         pygame.init()
         if self.data.on_fullscreen:

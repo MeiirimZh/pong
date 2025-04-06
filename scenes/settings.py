@@ -1,6 +1,6 @@
 import pygame
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, SETTINGS_PATH
 
 
 class Settings:
@@ -15,9 +15,9 @@ class Settings:
 
         self.options = ["Fullscreen", "Player side", "Background color", "Player 1 color", 
                         "Player 2 color", "Ball color", "Scores text color", 
-                        "Divider color", "Reset settings", "Return to menu"]
+                        "Divider color", "Reset settings", "Save settings", "Return to menu"]
         self.option_pos = [(400, 200), (400, 240), (400, 280), (400, 320), (400, 360), 
-                           (400, 400), (400, 440), (400, 480), (400, 520), (400, 560)]
+                           (400, 400), (400, 440), (400, 480), (400, 520), (400, 560), (400, 600)]
         self.current_option = 0
 
         self.color_channel = 0
@@ -53,8 +53,10 @@ class Settings:
                             self.display = self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
                         else:
                             self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                    if self.current_option == len(self.options) - 2:
+                    if self.current_option == len(self.options) - 3:
                         self.reset_settings()
+                    if self.current_option == len(self.options) - 2:
+                        self.save_settings()
                     if self.current_option == len(self.options) - 1:
                         self.game_state_manager.set_state("Main Menu")
 
@@ -212,3 +214,16 @@ class Settings:
 
         self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.side = 0
+
+    def save_settings(self):
+        settings = self.data.load_data(SETTINGS_PATH)
+        settings['on_fullscreen'] = self.data.on_fullscreen
+        settings['bg_color'] = self.data.bg_color
+        settings['player_1_color'] = self.data.player_1_color
+        settings['player_2_color'] = self.data.player_2_color
+        settings['ball_color'] = self.data.ball_color
+        settings['scores_color'] = self.data.scores_color
+        settings['divider_color'] = self.data.divider_color
+        settings['player'] = self.data.player
+        self.data.save_data(SETTINGS_PATH, settings)
+    
