@@ -61,24 +61,24 @@ class Settings:
                         self.game_state_manager.set_state("Main Menu")
 
     def handle_option_switch(self, event):
-        if event.key == pygame.K_UP or event.key == pygame.K_w:
+        if event.key in (self.data.player_1_up, self.data.player_2_up):
             self.current_option = max(0, self.current_option - 1)
             self.data.select_sound.play()
-        if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+        if event.key in (self.data.player_1_down, self.data.player_2_down):
             self.current_option = min(len(self.options) - 1, self.current_option + 1)
             self.data.select_sound.play()
 
     def handle_color_channel_switch(self, event):
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key in (self.data.sett_swch_left_1, self.data.sett_swch_left_2):
             self.color_channel = max(0, self.color_channel - 1)
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key in (self.data.sett_swch_right_1, self.data.sett_swch_right_2):
             self.color_channel = min(2, self.color_channel + 1)
 
     def handle_side_switch(self, event):
-        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.key in (self.data.sett_swch_left_1, self.data.sett_swch_left_2):
             self.side = 0
             self.data.player = "Player 2" if self.data.player == "Player 1" else "Player 1"
-        if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+        if event.key in (self.data.sett_swch_right_1, self.data.sett_swch_right_2):
             self.side = 1
             self.data.player = "Player 2" if self.data.player == "Player 1" else "Player 1"
 
@@ -226,4 +226,3 @@ class Settings:
         settings['divider_color'] = self.data.divider_color
         settings['player'] = self.data.player
         self.data.save_data(SETTINGS_PATH, settings)
-    

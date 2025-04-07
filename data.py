@@ -9,6 +9,17 @@ class Data:
 
         self.on_fullscreen = False
 
+        # Controls
+        self.player_1_up = pygame.K_w
+        self.player_1_down = pygame.K_s
+        self.player_2_up = pygame.K_UP
+        self.player_2_down = pygame.K_DOWN
+        self.sett_swch_left_1 = pygame.K_LEFT
+        self.sett_swch_left_2 = pygame.K_a
+        self.sett_swch_right_1 = pygame.K_RIGHT
+        self.sett_swch_right_2 = pygame.K_d
+
+        # Colors
         self.bg_color = [0, 0, 0]
         self.player_1_color = [255, 255, 255]
         self.player_2_color = [255, 255, 255]
@@ -16,6 +27,7 @@ class Data:
         self.scores_color = [50, 50, 50]
         self.divider_color = [50, 50, 50]
 
+        # Fonts
         self.score_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 50)
         self.title_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 128)
         self.medium_font = pygame.font.Font("fonts/Silkscreen-Regular.ttf", 60)
@@ -25,11 +37,13 @@ class Data:
 
         self.player = "Player 1"
 
+        # Speeds
         self.player_speed = 7
         self.computer_speed = 7
         self.ball_h_speed = 5
         self.ball_v_speed = 5
 
+        # Sounds
         self.beep_sound = pygame.mixer.Sound("sounds/beep.mp3")
         self.goal_sound = pygame.mixer.Sound("sounds/goal.mp3")
         self.select_sound = pygame.mixer.Sound("sounds/select.mp3")

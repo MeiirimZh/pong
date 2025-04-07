@@ -48,15 +48,15 @@ class DefaultGameScene:
         pygame.draw.rect(self.display, self.data.ball_color, self.ball.rect)
 
     def handle_player_1_input(self, keys):
-        if keys[pygame.K_w]:
+        if keys[self.data.player_1_up]:
             self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, -1, self.player_1.speed)
-        if keys[pygame.K_s]:
+        if keys[self.data.player_1_down]:
             self.player_1.y = self.change_y(self.player_1.y, self.player_1.height, 1, self.player_1.speed)
 
     def handle_player_2_input(self, keys):
-        if keys[pygame.K_UP]:
+        if keys[self.data.player_2_up]:
             self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, -1, self.player_2.speed)
-        if keys[pygame.K_DOWN]:
+        if keys[self.data.player_2_down]:
             self.player_2.y = self.change_y(self.player_2.y, self.player_2.height, 1, self.player_2.speed)
 
     def change_x(self, obj_x, obj_width, direction, speed):
@@ -85,14 +85,12 @@ class DefaultGameScene:
 
     def update_ball(self):
         self.ball.x = self.change_x(self.ball.x, self.ball.width, self.ball.h_direction, self.ball.h_speed)
-        self.ball.rect.x = self.ball.x
-
         self.ball.y = self.change_y(self.ball.y, self.ball.height, self.ball.v_direction, self.ball.v_speed)
+
+        self.ball.rect.x = self.ball.x
         self.ball.rect.y = self.ball.y
-        
-        if self.ball.y == 0:
-            self.ball.v_direction = -self.ball.v_direction
-        elif self.ball.y == self.screen_height - self.ball.height:
+
+        if self.ball.y == 0 or self.ball.y == self.screen_height - self.ball.height:
             self.ball.v_direction = -self.ball.v_direction
 
     def update_computer(self):
@@ -115,20 +113,17 @@ class DefaultGameScene:
 
     def detect_ball_collision(self):
         parts_count = 5
+        ball_collided = False
 
         if self.ball.rect.colliderect(self.player_1.rect):
             collide_part = self.what_part_of_x_is_y_in(self.player_1.height, self.player_1.y, self.ball.height, self.ball.y, parts_count)
-            if collide_part in (1, 2):
-                self.ball.v_direction = -1
-            elif collide_part == 3:
-                self.ball.v_direction = 0
-            else:
-                self.ball.v_direction = 1
-            self.ball.h_direction = -self.ball.h_direction
-            self.data.beep_sound.play()
+            ball_collided = True
 
         if self.ball.rect.colliderect(self.player_2.rect):
             collide_part = self.what_part_of_x_is_y_in(self.player_2.height, self.player_2.y, self.ball.height, self.ball.y, parts_count)
+            ball_collided = True
+
+        if ball_collided:
             if collide_part in (1, 2):
                 self.ball.v_direction = -1
             elif collide_part == 3:
@@ -166,6 +161,9 @@ class DefaultGameScene:
             self.ball.h_direction = 1
             self.player_1_win(1)
 
+        self.restart_ball()
+
+    def restart_ball(self):
         self.ball.x = self.screen_width // 2 - self.ball.width // 2
         self.ball.y = self.screen_height // 2 -self.ball.height // 2
         self.ball.v_direction = choice([-1, 1])

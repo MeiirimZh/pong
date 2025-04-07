@@ -31,10 +31,10 @@ class MainMenu:
 
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
+                if event.key in (self.data.player_1_up, self.data.player_2_up):
                     self.current_option = max(0, self.current_option - 1)
                     self.data.select_sound.play()
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                if event.key in (self.data.player_1_down, self.data.player_2_down):
                     self.current_option = min(len(self.options) - 1, self.current_option + 1)
                     self.data.select_sound.play()
                 if event.key == pygame.K_RETURN:
