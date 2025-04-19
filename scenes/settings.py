@@ -16,8 +16,10 @@ class Settings:
         self.options = ["Fullscreen", "Player side", "Background color", "Player 1 color", 
                         "Player 2 color", "Ball color", "Scores text color", 
                         "Divider color", "Reset settings", "Save settings", "Return to menu"]
-        self.option_pos = [(400, 200), (400, 240), (400, 280), (400, 320), (400, 360), 
-                           (400, 400), (400, 440), (400, 480), (400, 520), (400, 560), (400, 600)]
+
+        self.option_pos = []
+        self.place_options()
+
         self.current_option = 0
 
         self.color_channel = 0
@@ -226,3 +228,7 @@ class Settings:
         settings['divider_color'] = self.data.divider_color
         settings['player'] = self.data.player
         self.data.save_data(SETTINGS_PATH, settings)
+
+    def place_options(self):
+        for i in range(len(self.options)):
+            self.option_pos.append((400, 200 + i * 40))
