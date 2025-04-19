@@ -12,7 +12,11 @@ class MainMenu:
         self.title = self.data.title_font.render("PONG", True, (255, 255, 255))
         self.author = self.data.credits_font.render("Made by Zhanzhumanov Meiirim 2025", True, (255, 255, 255))
 
-        self.options = ["Player vs Player", "Player vs Computer", "Settings", "Exit"]
+        self.pvp_text = "Player vs Player"
+        self.pvc_text = "Player vs Computer"
+        self.settings_text = "Settings"
+
+        self.options = [self.pvp_text, self.pvc_text, self.settings_text, "Exit"]
         self.option_pos = [(458, 340), (434, 399), (554, 458), (600, 517)]
         self.current_option = 0
 
@@ -38,11 +42,11 @@ class MainMenu:
                     self.current_option = min(len(self.options) - 1, self.current_option + 1)
                     self.data.select_sound.play()
                 if event.key == pygame.K_RETURN:
-                    if self.current_option == 0:
+                    if self.options[self.current_option] == self.pvp_text:
                         self.game_state_manager.set_state("Player vs Player")
-                    elif self.current_option == 1:
+                    elif self.options[self.current_option] == self.pvc_text:
                         self.game_state_manager.set_state("Player vs Computer")
-                    elif self.current_option == 2:
+                    elif self.options[self.current_option] == self.settings_text:
                         self.game_state_manager.set_state("Settings")
                     else:
                         pygame.quit()

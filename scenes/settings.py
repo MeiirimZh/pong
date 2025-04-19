@@ -1,6 +1,7 @@
 import pygame
 
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, SETTINGS_PATH
+from scripts.utils import place_options_vertical
 
 
 class Settings:
@@ -23,7 +24,7 @@ class Settings:
                         "Divider color", self.reset_text, self.save_text, self.return_text]
 
         self.option_pos = []
-        self.place_options()
+        place_options_vertical(self.options, self.option_pos, 400, 200, 40)
 
         self.current_option = 0
 
@@ -234,7 +235,3 @@ class Settings:
         settings['divider_color'] = self.data.divider_color
         settings['player'] = self.data.player
         self.data.save_data(SETTINGS_PATH, settings)
-
-    def place_options(self):
-        for i in range(len(self.options)):
-            self.option_pos.append((400, 200 + i * 40))
