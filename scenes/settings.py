@@ -13,9 +13,14 @@ class Settings:
 
         self.title = self.data.medium_font.render("Settings", True, (255, 255, 255))
 
-        self.options = ["Fullscreen", "Player side", "Background color", "Player 1 color", 
+        self.fullscreen_text = "Fullscreen"
+        self.reset_text = "Reset settings"
+        self.save_text = "Save settings"
+        self.return_text = "Return to menu"
+
+        self.options = [self.fullscreen_text, "Player side", "Background color", "Player 1 color", 
                         "Player 2 color", "Ball color", "Scores text color", 
-                        "Divider color", "Reset settings", "Save settings", "Return to menu"]
+                        "Divider color", self.reset_text, self.save_text, self.return_text]
 
         self.option_pos = []
         self.place_options()
@@ -34,6 +39,7 @@ class Settings:
         self.render()
 
         self.options[0] = 'Fullscreen: ON' if self.data.on_fullscreen else 'Fullscreen: OFF'
+        self.fullscreen_text = self.options[0]
 
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -49,17 +55,17 @@ class Settings:
                     if self.current_option in range(2, 8):
                         self.delete_number(self.current_option, self.color_channel)
                 if event.key == pygame.K_RETURN:
-                    if self.current_option == 0:
+                    if self.options[self.current_option] == self.fullscreen_text:
                         self.data.on_fullscreen = not self.data.on_fullscreen
                         if self.data.on_fullscreen:
                             self.display = self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
                         else:
                             self.display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-                    if self.current_option == len(self.options) - 3:
+                    if self.options[self.current_option] == self.reset_text:
                         self.reset_settings()
-                    if self.current_option == len(self.options) - 2:
+                    if self.options[self.current_option] == self.save_text:
                         self.save_settings()
-                    if self.current_option == len(self.options) - 1:
+                    if self.options[self.current_option] == self.return_text:
                         self.game_state_manager.set_state("Main Menu")
 
     def handle_option_switch(self, event):
